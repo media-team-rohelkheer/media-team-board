@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Media Team Leaderboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+:root{--deep:#2a1458;--ink:#2a1458;--line:#6b3fd1;--gold:#ffc933;--silver:#c9c9ee;--bronze:#e8935a;--pill:#d9c8ff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:#2a1458}
+*{box-sizing:border-box}
+body{margin:0;background:#2a1458;font-family:'Press Start 2P',monospace,sans-serif;color:var(--ink);min-height:100vh}
+.wrap{max-width:520px;margin:0 auto;position:relative;overflow:hidden;background:#2a1458}
+.sc{position:absolute;bottom:0}.shop{position:absolute;right:2%;bottom:0;width:92px}.shop .sign{background:#3a1d78;border:2px solid #7ee8ff;color:#ff7ab8;font-size:8px;text-align:center;padding:5px 0}.shop .awn{height:12px;background:repeating-linear-gradient(90deg,#3ddbc4 0 8px,#ff9ad0 8px 16px)}.shop .bd{height:58px;background:#6b3fd1;border:2px solid #4b2a9e;display:flex;gap:5px;padding:6px}.shop .win{flex:1;background:#2a1458;border:2px solid #7ee8ff;color:#ff9b6a;font-size:14px;display:flex;align-items:center;justify-content:center}.shop .dr{width:18px;background:#ff7ab8;border:2px solid #7ee8ff}
+.sky{height:340px;position:relative;background:linear-gradient(#b4a0f2,#d8ccfc)}
+.title{position:absolute;left:50%;top:78px;transform:translateX(-50%);width:84%;text-align:center;background:#c9a6ff;border:4px solid #6b3fd1;border-radius:10px;padding:16px 6px 14px;box-shadow:0 0 0 4px #e4d6ff,0 6px 0 4px #4b2a9e;font-size:clamp(18px,6vw,30px);line-height:1.2;color:#2a1458;animation:bob 3s steps(6) infinite}
+.sub{position:absolute;left:50%;top:176px;transform:translateX(-50%);background:#d9c8ff;border:3px solid #6b3fd1;border-radius:10px;padding:9px 16px;font-size:clamp(9px,3vw,13px);white-space:nowrap}
+.sub i{color:#e8a800;font-style:normal;animation:tw 1.2s steps(2) infinite}
+.deco{position:absolute;font-size:34px;animation:float 3s steps(6) infinite;filter:saturate(1.2)}
+.cloud{position:absolute;animation:drift linear infinite}
+.sp{position:absolute;color:#ffd84d;font-size:18px;animation:tw 1.4s steps(2) infinite}
+.brick{height:34px;background:#7a4be0;background-image:repeating-linear-gradient(90deg,transparent 0 27px,#5a2fc0 27px 30px),repeating-linear-gradient(0deg,transparent 0 15px,#5a2fc0 15px 17px);border-top:4px solid #a07cf2}
+.board{padding:14px 12px 120px;position:relative}
+.hd,.row{display:grid;grid-template-columns:62px 1fr 92px;gap:10px;align-items:center}
+.hd{margin-bottom:10px;font-size:10px;text-align:center}
+.hd span{background:#a678f0;border-radius:8px;padding:11px 4px;border:2px solid #c9a6ff}
+.rows{position:relative}
+.row{position:absolute;left:0;right:0;height:50px;transition:transform .8s cubic-bezier(.3,1.5,.5,1)}
+.nt .row{transition:none}
+.rank{position:relative;justify-self:center;width:58px;text-align:center;padding:11px 0;border-radius:9px;background:#a678f0;color:#2a1458;font-size:13px;border:3px solid #c9a6ff}
+.r1 .rank{background:var(--gold);border-color:#fff0a6;animation:glow 1.2s steps(2) infinite}
+.r2 .rank{background:var(--silver);border-color:#f0f0ff}
+.r3 .rank{background:var(--bronze);border-color:#ffc7a1}
+.crown{position:absolute;top:-17px;left:50%;transform:translateX(-50%);font-size:16px;display:none;animation:float 1.6s steps(4) infinite}
+.r1 .crown{display:block}
+.name{background:var(--pill);border-radius:10px;height:46px;display:flex;align-items:center;padding:0 12px;font-family:'VT323','Segoe UI',Tahoma,sans-serif;font-size:23px;line-height:.95;overflow:hidden}
+.score{background:#3a1d78;border:3px solid #6b3fd1;border-radius:10px;height:46px;display:flex;align-items:center;justify-content:center;font-size:13px;color:#ffe27a}
+.row.pop .score{animation:pop .5s steps(5)}
+.row.hit .score{animation:shake .4s steps(4);color:#ff8fa3}
+.edit .row{cursor:pointer}
+.edit .row:hover .name{background:#fff}
+.sel .name{outline:3px solid var(--gold)}
+.hero{position:absolute;left:0;bottom:30px;animation:walk 14s linear infinite;z-index:3}
+.hero>div{animation:flip 14s steps(1) infinite;transform-origin:center}
+.hero svg{display:block;animation:step .4s steps(2) infinite}
+.blink{animation:tw .8s steps(2) infinite}
+.foot{position:absolute;left:0;right:0;bottom:0}
+.fl{position:absolute;pointer-events:none;width:8px;height:8px;z-index:9;animation:fly .9s ease-out forwards}
+#tools{position:fixed;top:calc(env(safe-area-inset-top,0px) + 8px);right:8px;z-index:20}
+button{font-family:inherit;cursor:pointer;border:3px solid #2a1458;background:#ffc933;color:#2a1458;border-radius:8px;padding:10px 12px;font-size:9px}
+button.g{background:#7ee08f}button.r{background:#ff9db0}button.p{background:#d9c8ff}
+#sheet{position:fixed;left:0;right:0;bottom:0;z-index:30;display:none;background:#3a1d78;border-top:4px solid var(--gold);padding:14px 12px calc(14px + env(safe-area-inset-bottom,0px));color:#fff}
+#sheet .in{max-width:520px;margin:0 auto}
+#sheet h3{margin:0 0 10px;font-size:11px;color:#ffe27a;font-family:'VT323','Segoe UI',sans-serif;font-size:24px;font-weight:400}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+#sheet input{font-family:'VT323','Segoe UI',sans-serif;font-size:22px;padding:6px 8px;border:3px solid #6b3fd1;border-radius:8px;width:44%;background:#d9c8ff;color:#2a1458}
+.save{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:25;display:none}
+#sheet.open~.save{display:none!important}
+@keyframes bob{50%{transform:translateX(-50%) translateY(-6px)}}
+@keyframes float{50%{transform:translateY(-8px)}}
+@keyframes tw{50%{opacity:.2;transform:scale(.7)}}
+@keyframes drift{from{left:-90px}to{left:110%}}
+@keyframes glow{50%{box-shadow:0 0 0 4px #fff0a6,0 0 14px 4px #ffc933}}
+@keyframes pop{50%{transform:scale(1.3);color:#fff}}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+@keyframes walk{0%{left:4%}47%{left:82%}50%{left:82%}97%{left:4%}100%{left:4%}}
+@keyframes flip{0%{transform:scaleX(1)}50%{transform:scaleX(-1)}100%{transform:scaleX(1)}}
+@keyframes step{50%{transform:translateY(-4px)}}
+@keyframes fly{to{transform:translate(var(--x),var(--y)) rotate(180deg);opacity:0}}
+</style>
+</head>
+<body>
+<div class="wrap"><div id="app"></div></div>
+<script id="data" type="application/json">{"players":[{"n":"Ahmed Abd Elmoneim","s":0},{"n":"Fatema Alzahraa","s":0},{"n":"Salma Alaa","s":0},{"n":"Omar Desouky","s":0},{"n":"Mohammed Abdallah (الميكانيكي)","s":0},{"n":"Mohammed Abdallah (الدمياطي)","s":0},{"n":"Bassant Mohammed","s":0},{"n":"Malak Elsaeed","s":0},{"n":"Shimaa","s":0},{"n":"Nadine","s":0}]}</script>
+<script type="module">
+const FILE="scores.json";
+async function loadScores(){try{const r=await fetch(FILE+'?t='+Date.now());if(!r.ok)return null;const j=await r.json();return Array.isArray(j.players)&&j.players.length?j.players:null}catch(e){return null}}
+const S=JSON.parse(document.getElementById('data').textContent);
+const sh=await loadScores();if(sh)S.players=sh;
+S.players.sort((a,b)=>a.n.localeCompare(b.n,'en'));
+const ROWH=58, app=document.getElementById('app');
+let canEdit=false, editMode=false, sel=null, dirty=false, art=null;
+const els=[], shown=S.players.map(()=>0);
+
+function px(grid,pal,sz,cls){let r='';grid.forEach((row,y)=>[...row].forEach((c,x)=>{if(pal[c])r+=`<rect x="${x}" y="${y}" width="1" height="1" fill="${pal[c]}"${c==='w'?' class="blink"':''}/>`}));
+ return `<svg class="${cls||''}" width="${grid[0].length*sz}" height="${grid.length*sz}" viewBox="0 0 ${grid[0].length} ${grid.length}" shape-rendering="crispEdges">${r}</svg>`}
+const hero=px(["...dddddd...","..dddddddd..",".dddddddddd.","..ssssssss..","..sksssksss.","..ssssssss..","...ssssss...","..bbbbbbbb..",".bbbbbbbcccc",".sbbbbbbccwl",".sbbbbbbcccc","..bbbbbbbb..","..nnnnnnnn..","..nnn..nnn..","..nnn..nnn..",".kkkk..kkkk."],
+ {d:'#7a3fe0',s:'#ffd2a8',k:'#1d0d3f',b:'#ff7ab8',c:'#2b2b4d',w:'#ff3b5c',l:'#7ee8ff',n:'#3b2a8f'},5);
+const cloud=px(["....wwww........","..wwwwwwww..ww..","wwwwwwwwwwwwwwww","pppppppppppppppp"],{w:'#ffc7d9',p:'#a889ee'},6);
+
+const lamp=px(["..ppppppp...",".pp.....yy..",".p.....yyyy.",".p....yyyyyy",".p.....z.z..",...Array(12).fill(".p.........."),".pppp......."],{p:'#b0309a',y:'#ffe566',z:'#fff3a8'},5);
+const cam=px(["..ddddddddd.....",".dddddddddddddd.","lldddddddddddddd","lldddddddddddddd",".dddddddddddddd.",".....dd.........","....k.kk.k......","...k...k...k....","..k....k....k...",".k.....k.....k.."],{d:'#3a2a8f',l:'#7ee8ff',k:'#1d0d3f'},4);
+const bush=px(["....gggg........","..ggghggg.ggg...",".gghgggggggghgg.","gggggGgggggGgggg"],{g:'#2f8f4a',h:'#5fc46a',G:'#1f6b36'},4);
+app.innerHTML=`
+<div class="sky">
+ <div class="cloud" style="top:20px;animation-duration:60s">${cloud}</div>
+ <div class="cloud" style="top:150px;animation-duration:85s;animation-delay:-30s;opacity:.85">${cloud}</div>
+ <div class="cloud" style="top:230px;animation-duration:70s;animation-delay:-50s;opacity:.8">${cloud}</div>
+ <span class="sp" style="left:12%;top:40px">✦</span><span class="sp" style="left:70%;top:30px;animation-delay:.4s">✦</span>
+ <span class="sp" style="left:88%;top:120px;animation-delay:.8s">✦</span><span class="sp" style="left:6%;top:200px;animation-delay:.2s">✦</span>
+ <div class="deco" style="left:44%;top:6px">🎬</div>
+ <div class="deco" style="left:6%;top:100px;animation-delay:.5s">📣</div>
+ <div class="deco" style="right:6%;top:100px;animation-delay:1s">🎧</div>
+ <div class="sc" style="left:9%">${bush}</div><div class="sc" style="left:44%">${bush}</div><div class="sc" style="right:19%">${bush}</div>
+ <div class="sc" style="left:2%">${lamp}</div><div class="sc" style="left:17%">${cam}</div>
+ <div class="shop"><div class="sign">MEDIA</div><div class="awn"></div><div class="bd"><div class="win">▶</div><div class="dr"></div></div></div>
+ <div class="deco" style="left:6%;top:22px;animation-delay:.3s">🎞️</div>
+ <div class="deco" style="right:6%;top:22px;animation-delay:.9s">💻</div>
+ <div class="title">MEDIA TEAM</div>
+ <div class="sub"><i>✦</i> LEADERBOARD <i>✦</i></div>
+</div>
+<div class="brick"></div>
+<div class="board">
+ <div class="hd"><span>RANK</span><span>NAME</span><span>SCORE</span></div>
+ <div class="rows" id="rows" style="height:${S.players.length*ROWH}px"></div>
+</div>
+<div class="foot"><div class="hero"><div>${hero}</div></div><div class="brick"></div></div>
+<div id="tools"></div>
+<div id="sheet"></div>
+<button class="save g" id="save">SAVE &amp; PUBLISH</button>`;
+
+const rowsEl=document.getElementById('rows');
+S.players.forEach((p,i)=>{const e=document.createElement('div');e.className='row';
+ e.innerHTML='<div class="rank"><span class="crown">👑</span><b></b></div><div class="name"></div><div class="score">0</div>';
+ nm(e.querySelector('.name'),p.n);e.onclick=()=>pick(i);rowsEl.appendChild(e);els.push(e)});
+
+function nm(el,t){el.textContent='';t.split(/([\u0600-\u06FF][\u0600-\u06FF\s]*)/).forEach(x=>{if(!x)return;if(/[\u0600-\u06FF]/.test(x)){const s=document.createElement('span');s.style.fontSize='.68em';s.textContent=x;el.appendChild(s)}else el.appendChild(document.createTextNode(x))})}
+function order(sc){return [...sc.keys()].sort((a,b)=>sc[b]-sc[a]||a-b)}
+function place(sc){let rk=0;order(sc).forEach((id,pos)=>{if(pos===0||sc[id]===0||sc[id]!==sc[order(sc)[pos-1]])rk=pos+1;
+ const e=els[id];e.style.transform=`translateY(${pos*ROWH}px)`;e.className='row '+(sc[id]>0?'r'+rk:'')+(sel===id?' sel':'');e.querySelector('b').textContent=rk})}
+function count(id,to){const e=els[id].querySelector('.score'),from=shown[id],t0=performance.now();shown[id]=to;
+ (function f(t){const k=Math.min(1,(t-t0)/600);e.textContent=Math.round(from+(to-from)*k);if(k<1)requestAnimationFrame(f)})(t0)}
+function burst(id,good){const r=els[id].getBoundingClientRect();const cols=['#ffc933','#ff7ab8','#7ee8ff','#7ee08f','#fff'];
+ for(let i=0;i<18;i++){const f=document.createElement('div');f.className='fl';f.style.background=cols[i%5];
+  f.style.left=(r.right-50)+'px';f.style.top=(r.top+20)+'px';f.style.position='fixed';
+  f.style.setProperty('--x',(Math.random()*240-120)+'px');f.style.setProperty('--y',(Math.random()*-120-10)+'px');
+  document.body.appendChild(f);setTimeout(()=>f.remove(),950)}}
+
+// intro: start from last seen state (or zero) and animate to the current one
+let seen=null;try{seen=JSON.parse(sessionStorage.getItem('seen'))}catch(e){}
+const start=(seen&&seen.length===S.players.length)?seen:S.players.map(()=>0);
+const cur=S.players.map(p=>p.s);
+rowsEl.classList.add('nt');rowsEl.parentNode.classList.add('nt');
+start.forEach((v,i)=>{shown[i]=v;els[i].querySelector('.score').textContent=v});place(start);
+void rowsEl.offsetHeight;rowsEl.parentNode.classList.remove('nt');
+setTimeout(()=>{place(cur);cur.forEach((v,i)=>{if(v!==shown[i])count(i,v)})},500);
+function remember(){try{sessionStorage.setItem('seen',JSON.stringify(S.players.map(p=>p.s)))}catch(e){}}
+remember();
+
+// ---- owner editing ----
+function pick(i){if(!editMode)return;sel=i;place(S.players.map(p=>p.s));sheet()}
+function delta(d){if(sel===null||!d)return;S.players[sel].s+=d;count(sel,S.players[sel].s);place(S.players.map(p=>p.s));
+ const e=els[sel];e.classList.remove('pop','hit');void e.offsetWidth;e.classList.add(d>0?'pop':'hit');if(d>0)burst(sel,true);
+ setDirty();sheet()}
+function setDirty(){dirty=true;remember();document.getElementById('save').style.display='block'}
+function sheet(){const s=document.getElementById('sheet');if(sel===null){s.style.display='none';s.className='';return}
+ s.style.display='block';s.className='open';const p=S.players[sel];
+ s.innerHTML=`<div class="in"><h3></h3><div class="btns">
+ <button class="g" data-d="5">+5 EARLY</button><button class="g" data-d="2">+2 ON TIME</button><button class="r" data-d="-2">-2 LATE</button>
+ <button data-d="10">+10 HELPED</button><button data-d="10">+10 SUDDEN</button></div>
+ <div class="btns"><input id="cus" type="number" placeholder="+/- points"><button class="p" id="addc">ADD</button></div>
+ <div class="btns"><input id="nm"><button class="p" id="ren">RENAME</button><button id="done">DONE</button></div></div>`;
+ s.querySelector('h3').textContent=p.n+' — '+p.s;s.querySelector('#nm').value=p.n;
+ s.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>delta(+b.dataset.d));
+ s.querySelector('#addc').onclick=()=>delta(parseInt(s.querySelector('#cus').value,10)||0);
+ s.querySelector('#ren').onclick=()=>{const v=s.querySelector('#nm').value.trim();if(v){p.n=v;nm(els[sel].querySelector('.name'),v);setDirty();sheet()}};
+ s.querySelector('#done').onclick=()=>{sel=null;place(S.players.map(p=>p.s));sheet()}}
+function tools(){const t=document.getElementById('tools');if(!canEdit){t.innerHTML='';return}
+ t.innerHTML='<button class="p">'+(editMode?'EXIT EDIT':'EDIT')+'</button>';
+ t.firstChild.onclick=()=>{editMode=!editMode;sel=null;document.body.classList.toggle('edit',editMode);place(S.players.map(p=>p.s));sheet();tools()}}
+document.getElementById('save').onclick=async()=>{const b=document.getElementById('save');
+ let cfg={};try{cfg=JSON.parse(localStorage.getItem('mtb')||'{}')}catch(e){}
+ if(!cfg.repo)cfg.repo=(prompt('GitHub repository, e.g. yourname/media-team-board')||'').trim();
+ if(!cfg.token)cfg.token=(prompt('Paste your GitHub token (it stays only in this browser)')||'').trim();
+ if(!cfg.repo||!cfg.token){b.textContent='MISSING REPO / TOKEN';return}
+ b.textContent='SAVING...';
+ try{const url='https://api.github.com/repos/'+cfg.repo+'/contents/scores.json';
+  const hd={Authorization:'Bearer '+cfg.token,Accept:'application/vnd.github+json'};
+  let sha;const g=await fetch(url,{headers:hd});if(g.ok)sha=(await g.json()).sha;else if(g.status!==404)throw 0;
+  const bytes=new TextEncoder().encode(JSON.stringify({players:S.players},null,1));let bin='';bytes.forEach(x=>bin+=String.fromCharCode(x));
+  const r=await fetch(url,{method:'PUT',headers:hd,body:JSON.stringify({message:'Update scores',content:btoa(bin),sha})});
+  if(!r.ok)throw 0;
+  try{localStorage.setItem('mtb',JSON.stringify(cfg))}catch(e){}
+  dirty=false;b.textContent='SAVED - LIVE IN ~1 MIN';setTimeout(()=>{b.style.display='none';b.textContent='SAVE & PUBLISH'},3000)
+ }catch(e){b.textContent='SAVE FAILED - CHECK TOKEN';try{localStorage.removeItem('mtb')}catch(_){}}};
+canEdit=new URLSearchParams(location.search).has('admin');tools();
+setInterval(async()=>{if(dirty||editMode)return;const r=await loadScores();if(!r)return;r.forEach(q=>{const i=S.players.findIndex(p=>p.n===q.n);if(i>-1&&S.players[i].s!==q.s){S.players[i].s=q.s;count(i,q.s)}});place(S.players.map(p=>p.s));remember()},60000);
+</script>
+</body>
+</html>
